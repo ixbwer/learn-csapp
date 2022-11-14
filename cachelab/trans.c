@@ -18,10 +18,46 @@ int is_transpose(int M, int N, int A[N][M], int B[M][N]);
  *     the description string "Transpose submission", as the driver
  *     searches for that string to identify the transpose function to
  *     be graded. 
+ * Your code in trans.c must compile without warnings to receive credit.
+ * requirement:
+• You are allowed to define at most 12 local variables of type int per transpose function.1
+• You are not allowed to side-step the previous rule by using any variables of type long or by using
+any bit tricks to store more than one value to a single variable.
+• Your transpose function may not use recursion.
+• If you choose to use helper functions, you may not have more than 12 local variables on the stack
+at a time between your helper functions and your top level transpose function. For example, if your
+transpose declares 8 variables, and then you call a function which uses 4 variables, which calls another
+function which uses 2, you will have 14 variables on the stack, and you will be in violation of the rule.
+• Your transpose function may not modify array A. You may, however, do whatever you want with the
+contents of array B.
+• You are NOT allowed to define any arrays in your code or to use any variant of malloc.
  */
 char transpose_submit_desc[] = "Transpose submission";
+void bijk(int** A, int** B, int** C, int n,  int bsize)
+{
+    int i, j , k, kk, jj;
+    double sum;
+    int en = bsize * (n / bsize);
+    for (i = 0; i < n; i++)
+        for(j = 0; j < n; j++)
+            C[i][j] = 0;
+    for (kk = 0; kk < en; kk += bsize) {
+        for (jj = 0; jj < en; jj += bsize) {
+            for (i = 0; i < n; i++) {
+                for (j = jj; j < jj + bsize; j++) {
+                    sum = C[i][j];
+                    for (k = kk; k < kk + bsize; k++) {
+                    sum += A[i][k]*B[k][j];
+                    }
+                    C[i][j] = sum;
+                }
+            }
+        }
+    }
+}
 void transpose_submit(int M, int N, int A[N][M], int B[M][N])
 {
+
 }
 
 /* 

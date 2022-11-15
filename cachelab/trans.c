@@ -57,29 +57,42 @@ void bijk(int** A, int** B, int** C, int n,  int bsize)
 }
 void transpose_submit(int M, int N, int A[N][M], int B[M][N])
 {
-    int i, j, kk, jj, tmp;
-    for (i = 0; i < M; i++)
-    {
-        for (j = 0; j < N; N++)
-        {
-            B[i][j] = 0;
-        }
-    }
-    int bsize = 8;
+    int i, j, kk, jj;
+    int bsize = 4;
+     int temparray[4][4] = {0};
     for (kk = 0; kk < N; kk += bsize)
     {
         for (jj = 0; jj < M; jj += bsize)
         {
+            
             for (i = kk; i < (kk + bsize); i++)
             {
                 for (j = jj; j < (jj + bsize); j++)
                 {
-                    tmp = A[i][j];
-                    B[j][i] = tmp;
+
+                    temparray[i - kk][j - jj] = A[i][j];
+                    // B[j][i] = A[i][j];
                 }
             }
+            for (j = jj; j < (jj + bsize); j++)
+            {
+                for (i = kk; i < (kk + bsize); i++)
+                {
+                    B[j][i] = temparray[j - jj][i - kk];
+                }
+            }
+            /*
+            for (i = kk; i < (kk + bsize); i++)
+            {
+                for (j = jj; j < (jj + bsize); j++)
+                {
+
+                    B[j][i] = A[i][j];
+                }
+            }*/
         }
     }
+    /*
     for (i = kk; i < N; i++)
     {
         for (j = 0; j < M; j++)
@@ -96,6 +109,7 @@ void transpose_submit(int M, int N, int A[N][M], int B[M][N])
             B[j][i] = tmp;
         }
     }
+    */
 }
 
 /* 
